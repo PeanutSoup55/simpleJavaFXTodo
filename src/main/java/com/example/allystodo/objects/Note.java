@@ -116,6 +116,36 @@ public class Note {
         return notesList;
     }
 
+    public String getFileName() {
+        return fileName;
+    }
 
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+
+    public String getFilePath() {
+        String path = NOTES_DIRECTORY + File.separator + fileName;
+        if (!fileName.endsWith(".txt")) {
+            path += ".txt";
+        }
+        return path;
+    }
 
 }
