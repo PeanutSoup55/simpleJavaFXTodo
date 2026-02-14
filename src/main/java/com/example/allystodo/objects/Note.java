@@ -1,6 +1,8 @@
 package com.example.allystodo.objects;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Note {
     private static final String NOTES_DIRECTORY = "notes";
@@ -99,5 +101,21 @@ public class Note {
             return false;
         }
     }
+
+    public static List<String> getAllNotes(){
+        List<String> notesList = new ArrayList<>();
+        File directory = new File(NOTES_DIRECTORY);
+        if (directory.exists() && directory.isDirectory()){
+            File[] files = directory.listFiles((dir, name) -> name.endsWith(".txt"));
+            if (files != null) {
+                for (File file : files){
+                    notesList.add(file.getName().replace(".txt", ""));
+                }
+            }
+        }
+        return notesList;
+    }
+
+
 
 }
