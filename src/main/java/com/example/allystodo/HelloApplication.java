@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -100,6 +101,57 @@ public class HelloApplication extends Application {
         leftContainer.getChildren().addAll(listsContainer, refreshButton);
 
         return leftContainer;
+    }
+
+    private VBox createCenterPanel() {
+        VBox centerPanel = new VBox(10);
+        centerPanel.setPadding(new Insets(5));
+
+        // File name input
+        HBox fileNameBox = new HBox(10);
+        Label fileLabel = new Label("File Name:");
+        fileNameField = new TextField();
+        fileNameField.setPromptText("Enter note name (without .txt)");
+        HBox.setHgrow(fileNameField, Priority.ALWAYS);
+        fileNameBox.getChildren().addAll(fileLabel, fileNameField);
+
+        // Checkbox for completion status
+        HBox checkboxBox = new HBox(10);
+        checkedCheckBox = new CheckBox("Mark as completed");
+        checkedCheckBox.setStyle("-fx-font-size: 13px;");
+        checkboxBox.getChildren().add(checkedCheckBox);
+
+        // Content area
+        Label contentLabel = new Label("Content:");
+        contentLabel.setStyle("-fx-font-weight: bold;");
+
+        contentArea = new TextArea();
+        contentArea.setPromptText("Enter your note content here...");
+        contentArea.setWrapText(true);
+        VBox.setVgrow(contentArea, Priority.ALWAYS);
+
+        // Buttons
+        HBox buttonBox = new HBox(10);
+        buttonBox.setPadding(new Insets(5, 0, 0, 0));
+
+        Button newButton = new Button("New Note");
+        newButton.setOnAction(e -> createNewNote());
+
+        Button saveButton = new Button("Save Note");
+        saveButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+        saveButton.setOnAction(e -> saveNote());
+
+        Button deleteButton = new Button("Delete Note");
+        deleteButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
+        deleteButton.setOnAction(e -> deleteNote());
+
+        Button clearButton = new Button("Clear");
+        clearButton.setOnAction(e -> clearFields());
+
+        buttonBox.getChildren().addAll(newButton, saveButton, deleteButton, clearButton);
+
+        centerPanel.getChildren().addAll(fileNameBox, checkboxBox, contentLabel, contentArea, buttonBox);
+        return centerPanel;
     }
 
 
