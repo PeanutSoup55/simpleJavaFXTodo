@@ -2,7 +2,6 @@ package com.example.allystodo;
 
 import com.example.allystodo.objects.Note;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -174,6 +173,7 @@ public class HelloApplication extends Application {
         currentNote = new Note(fileName, content, checked);
         if (currentNote.writeToFile()) {
             updateStatus("Saved: " + fileName);
+            clearFields();
             refreshNoteList();
             showInfo("Success", "Note saved successfully!");
         } else {
@@ -267,6 +267,8 @@ public class HelloApplication extends Application {
         alert.showAndWait();
     }
 
-
+    public static void main(String[] args) {
+        launch(args);
+    }
 
 }

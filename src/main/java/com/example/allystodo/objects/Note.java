@@ -72,7 +72,7 @@ public class Note {
             while ((line = reader.readLine()) != null) {
                 if (firstLine && line.startsWith("CHECKED:")) {
                     // Parse the checked status
-                    this.checked = Boolean.parseBoolean(line.substring(8));
+                    this.checked = Boolean.parseBoolean(line.substring(8).trim());
                     firstLine = false;
                 } else {
                     contentBuilder.append(line).append("\n");
