@@ -86,4 +86,18 @@ public class Note {
         }
     }
 
+    public boolean deleteFile(){
+        try{
+            String filePath = NOTES_DIRECTORY + File.separator + fileName;
+            if (!fileName.endsWith(".txt")){
+                filePath += ".txt";
+            }
+            File file = new File(filePath);
+            return file.delete();
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }
