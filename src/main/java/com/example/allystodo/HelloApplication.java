@@ -104,4 +104,64 @@ public class HelloApplication extends Application {
 
 
 
+    private void refreshNoteList() {
+        activeNotesListView.getItems().clear();
+        completedNotesListView.getItems().clear();
+
+        for (String fileName : Note.getAllNotes()) {
+            Note note = new Note(fileName);
+            if (note.readFromFile()) {
+                if (note.isChecked()) {
+                    completedNotesListView.getItems().add(fileName);
+                } else {
+                    activeNotesListView.getItems().add(fileName);
+                }
+            }
+        }
+
+        updateStatus("Note lists refreshed - " +
+                activeNotesListView.getItems().size() + " active, " +
+                completedNotesListView.getItems().size() + " completed");
+    }
+
+    private void loadNote(String fileName) {
+        currentNote = new Note(fileName);
+        if (currentNote.readFromFile()) {
+            fileNameField.setText(fileName);
+            contentArea.setText(currentNote.getContent());
+            checkedCheckBox.setSelected(currentNote.isChecked());
+            updateStatus("Loaded: " + fileName);
+        } else {
+            showAlert("Error", "Failed to load note: " + fileName);
+        }
+    }
+
+    private void clearFields() {
+        fileNameField.clear();
+        contentArea.clear();
+        checkedCheckBox.setSelected(false);
+        activeNotesListView.getSelectionModel().clearSelection();
+        completedNotesListView.getSelectionModel().clearSelection();
+    }
+    private void updateStatus(String message) {
+        statusLabel.setText(message);
+    }
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private void showInfo(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+
+
 }
