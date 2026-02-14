@@ -7,6 +7,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -42,4 +43,65 @@ public class HelloApplication extends Application {
         stage.show();
         refreshNoteList();
     }
+
+    private VBox createLeftPanel() {
+        HBox leftPanel = new HBox(10);
+        leftPanel.setPadding(new Insets(5));
+        leftPanel.setPrefWidth(450);
+
+        VBox activeBox = new VBox(10);
+        activeBox.setPadding(new Insets(5));
+        activeBox.setPrefWidth(220);
+
+        Label activeLabel = new Label("Active Todos");
+        activeLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+
+        activeNotesListView = new ListView<>();
+        activeNotesListView.setPrefHeight(400);
+
+        activeNotesListView.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (newValue != null) {
+                        completedNotesListView.getSelectionModel().clearSelection();
+                        loadNote(newValue);
+                    }
+                }
+        );
+
+        activeBox.getChildren().addAll(activeLabel, activeNotesListView);
+
+        VBox completedBox = new VBox(10);
+        completedBox.setPadding(new Insets(5));
+        completedBox.setPrefWidth(220);
+
+        Label completedLabel = new Label("Completed Todos");
+        completedLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #4CAF50;");
+
+        completedNotesListView = new ListView<>();
+        completedNotesListView.setPrefHeight(400);
+
+        completedNotesListView.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (newValue != null) {
+                        activeNotesListView.getSelectionModel().clearSelection();
+                        loadNote(newValue);
+                    }
+                }
+        );
+
+        completedBox.getChildren().addAll(completedLabel, completedNotesListView);
+        Button refreshButton = new Button("Refresh Lists");
+        refreshButton.setMaxWidth(Double.MAX_VALUE);
+        refreshButton.setOnAction(e -> refreshNoteList());
+
+        VBox leftContainer = new VBox(10);
+        HBox listsContainer = new HBox(10);
+        listsContainer.getChildren().addAll(activeBox, completedBox);
+        leftContainer.getChildren().addAll(listsContainer, refreshButton);
+
+        return leftContainer;
+    }
+
+
+
 }
