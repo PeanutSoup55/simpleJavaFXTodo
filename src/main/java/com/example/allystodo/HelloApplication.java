@@ -155,6 +155,59 @@ public class HelloApplication extends Application {
     }
 
 
+    private void createNewNote() {
+        clearFields();
+        currentNote = null;
+        updateStatus("Ready to create new note");
+    }
+
+    private void saveNote() {
+        String fileName = fileNameField.getText().trim();
+        String content = contentArea.getText();
+        boolean checked = checkedCheckBox.isSelected();
+
+        if (fileName.isEmpty()) {
+            showAlert("Validation Error", "Please enter a file name");
+            return;
+        }
+
+        currentNote = new Note(fileName, content, checked);
+        if (currentNote.writeToFile()) {
+            updateStatus("Saved: " + fileName);
+            refreshNoteList();
+            showInfo("Success", "Note saved successfully!");
+        } else {
+            showAlert("Error", "Failed to save note");
+        }
+    }
+
+    private void deleteNote() {
+        String fileName = fileNameField.getText().trim();
+
+        if (fileName.isEmpty()) {
+            showAlert("Validation Error", "Please select or enter a file name to delete");
+            return;
+        }
+
+        Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmation.setTitle("Confirm Delete");
+        confirmation.setHeaderText("Delete Note");
+        confirmation.setContentText("Are you sure you want to delete '" + fileName + "'?");
+
+        confirmation.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                Note noteToDelete = new Note(fileName);
+                if (noteToDelete.deleteFile()) {
+                    updateStatus("Deleted: " + fileName);
+                    clearFields();
+                    refreshNoteList();
+                    showInfo("Success", "Note deleted successfully!");
+                } else {
+                    showAlert("Error", "Failed to delete note");
+                }
+            }
+        });
+    }
 
     private void refreshNoteList() {
         activeNotesListView.getItems().clear();
